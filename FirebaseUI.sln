@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.35821.62
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirebaseUI", "FirebaseUI\FirebaseUI.csproj", "{DDCE271D-09C0-4A48-9946-F69997D2933B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDCE271D-09C0-4A48-9946-F69997D2933B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDCE271D-09C0-4A48-9946-F69997D2933B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDCE271D-09C0-4A48-9946-F69997D2933B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDCE271D-09C0-4A48-9946-F69997D2933B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B17737F3-2FBA-48BC-974B-930CD1D7D218}
+	EndGlobalSection
+EndGlobal

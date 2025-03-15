@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>FirebaseUI</RootNamespace>
+    <TargetFramework>net9.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--
+      Enable trim analyzers for Android class libraries.
+      To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming
+    -->
+    <IsTrimmable>true</IsTrimmable>
+    <LangVersion>preview</LangVersion>
+    <!--
+      NOTE: you can simply add .aar or .jar files in this directory to be included in the project.
+      To learn more, see: https://learn.microsoft.com/dotnet/maui/migration/android-binding-projects
+    -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Firebase.Auth" Version="122.3.1.4" />
+    <PackageReference Include="Xamarin.Firebase.Storage" Version="121.0.1.2" />
+    <PackageReference Include="Xamarin.AndroidX.Credentials.PlayServicesAuth" Version="1.2.2.4" />
+    <PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="120.7.0.3" />
+
+    <PackageReference Include="Xamarin.Android.Glide" Version="4.16.0.11" />
+    <PackageReference Include="Xamarin.Android.Glide.AVIF.Integration" Version="4.16.0.11" />
+    <PackageReference Include="Xamarin.Android.Glide.RecyclerViewIntegration" Version="4.16.0.11" />
+    
+    <PackageReference Include="Xamarin.AndroidX.Activity" Version="1.10.1" />
+    <PackageReference Include="Xamarin.AndroidX.Fragment" Version="1.8.6" />
+
+    <PackageReference Include="Xamarin.AndroidX.Browser" Version="1.8.0.8" />
+    <PackageReference Include="Xamarin.AndroidX.CardView" Version="1.0.0.33" />
+    <PackageReference Include="Xamarin.AndroidX.ConstraintLayout" Version="2.2.1" />
+    <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0.31" />
+    <PackageReference Include="Xamarin.AndroidX.Lifecycle.Extensions" Version="2.2.0.31" />
+    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.12.0.2" />
+  </ItemGroup>
+
+  <!-- Include format is {GroupId}:{ArtifactId} -->  
+  <ItemGroup>
+    <AndroidNamespaceReplacement Include="Com.Firebase.UI" Replacement="FirebaseUI" />
+    
+    <AndroidLibrary Manifest="firebase-ui-auth-8.0.2.pom" Update="firebase-ui-auth-8.0.2.aar" />
+    <AndroidLibrary Manifest="firebase-ui-storage-8.0.2.pom" Update="firebase-ui-storage-8.0.2.aar" />
+    
+    <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-auth:8.0.2" /> <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-storage:8.0.2" />
+</ItemGroup>
+
+</Project>

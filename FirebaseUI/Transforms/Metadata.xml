@@ -1,0 +1,111 @@
+﻿<metadata>
+	<attr path="/api/package[@name='com.firebase.ui.auth']/
+		class[@name='FirebaseAuthUIActivityResultContract']/
+		method[@name='parseResult' and
+		count(parameter)=2 and
+		parameter[1][@type='int'] and
+		parameter[2][@type='android.content.Intent']]"
+		name="managedReturn"> Java.Lang.Object </attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth.data.remote']/
+		class[@name='ProfileMerger']/
+		method[@name='then' and
+		count(parameter)=1 and
+		parameter[1][@type='com.google.android.gms.tasks.Task&lt;com.google.firebase.auth.AuthResult&gt;']]"
+		name="managedReturn"> Java.Lang.Object </attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth']/
+		  class[@name='FirebaseAuthUIActivityResultContract']/
+		  method[@name='createIntent' and count(parameter)=2 and
+		  parameter[1][@type='android.content.Context'] and parameter[2][@type='android.content.Intent']]
+		  /parameter[2]" name="managedType"> Java.Lang.Object </attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth.viewmodel']/
+		  class[@name='ResourceObserver']/
+		  method[@name='onChanged' and count(parameter)=1 and
+		  parameter[1][@type='com.firebase.ui.auth.data.model.Resource&lt;T&gt;']]
+		  /parameter[1]" name="managedType"> Java.Lang.Object </attr>
+
+	<attr path="/api/package[@name='com.firebase.ui.auth.data.model']/
+		class[@name='CountryInfo']/
+		method[@name='compareTo' and count(parameter)=1 and
+		parameter[1][@type='com.firebase.ui.auth.data.model.CountryInfo']]
+		/parameter[1]" name="managedType"> Java.Lang.Object </attr>
+
+	<attr path="/api/package[@name='com.firebase.ui.auth']/
+		  class[@name='AuthUI.AuthIntentBuilder']"
+		  name="visibility"> public </attr>
+	
+	<!--<attr path="/api/package[@name='com.firebase.ui.storage.images']/
+		  class[@name='FirebaseImageLoader']/
+		  method[@name='handles' and count(parameter)=1 and 
+		  parameter[1][@type='com.google.firebase.storage.StorageReference']]"
+		  name="visibility"> private </attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.storage.images']/
+		  class[@name='FirebaseImageLoader']/
+		  method[@name='buildLoadData' and count(parameter)=4 and
+		  parameter[1][@type='com.google.firebase.storage.StorageReference'] and
+		  parameter[2][@type='int'] and parameter[3][@type='int'] and
+		  parameter[4][@type='com.bumptech.glide.load.Options']]"
+		  name="visibility"> private </attr>-->
+	
+	<attr path="/api/package[@name='com.firebase.ui.storage.images']/
+		  class[@name='FirebaseImageLoader']/
+		  method[@name='handles' and count(parameter)=1 and 
+		  parameter[1][@type='com.google.firebase.storage.StorageReference']]
+		  /parameter[1]"
+		  name="managedType"> Java.Lang.Object  </attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.storage.images']/
+		  class[@name='FirebaseImageLoader']/
+		  method[@name='buildLoadData' and count(parameter)=4 and
+		  parameter[1][@type='com.google.firebase.storage.StorageReference'] and
+		  parameter[2][@type='int'] and parameter[3][@type='int'] and
+		  parameter[4][@type='com.bumptech.glide.load.Options']]
+		  /parameter[1]"
+		  name="managedType"> Java.Lang.Object  </attr>
+	
+	<!-- FirebaseUI.Auth.AuthUI.SignInIntentBuilder 
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setAlwaysShowSignInMethodScreen' and count(parameter)=1 and parameter[1][@type='boolean']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setAuthMethodPickerLayout' and count(parameter)=1 and parameter[1][@type='com.firebase.ui.auth.AuthMethodPickerLayout']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setAvailableProviders' and count(parameter)=1 and parameter[1][@type='java.util.List&lt;com.firebase.ui.auth.AuthUI.IdpConfig&gt;']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setDefaultProvider' and count(parameter)=1 and parameter[1][@type='com.firebase.ui.auth.AuthUI.IdpConfig']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setIsSmartLockEnabled' and count(parameter)=1 and parameter[1][@type='boolean']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setIsSmartLockEnabled' and count(parameter)=2 and parameter[1][@type='boolean'] and parameter[2][@type='boolean']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setLockOrientation' and count(parameter)=1 and parameter[1][@type='boolean']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setLogo' and count(parameter)=1 and parameter[1][@type='int']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setPrivacyPolicyUrl' and count(parameter)=1 and parameter[1][@type='java.lang.String']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setResetPasswordSettings' and count(parameter)=1 and parameter[1][@type='com.google.firebase.auth.ActionCodeSettings']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setTheme' and count(parameter)=1 and parameter[1][@type='int']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setTosAndPrivacyPolicyUrls' and count(parameter)=2 and parameter[1][@type='java.lang.String'] and parameter[2][@type='java.lang.String']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']/method[@name='setTosUrl' and count(parameter)=1 and parameter[1][@type='java.lang.String']]"
+		  name="managedReturn"> FirebaseUI.Auth.AuthUI.SignInIntentBuilder</attr>
+	
+	  FirebaseUI.Auth.AuthUI.SignInIntentBuilder  -->
+
+</metadata>
