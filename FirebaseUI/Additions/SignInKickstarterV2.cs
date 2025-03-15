@@ -1,4 +1,5 @@
-﻿using Android.Content;
+﻿using System.Diagnostics.CodeAnalysis;
+using Android.Content;
 using Android.Gms.Auth.Api.Credentials;
 using Android.Gms.Common.Apis;
 using Android.Gms.Extensions;
@@ -53,20 +54,26 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
     {
         if (provider is null)
             return;
-
         switch (provider)
         {
-            case "password":
-                this.SetResult(Model.Resource.ForFailure(new IntentRequiredException(EmailActivity.CreateIntent(this.Application as Application, (FlowParameters)this.Arguments, id), 106)));
+            case AuthUI.PasswordProvider:
+                this.SetResult(Model.Resource.ForFailure(
+                    new IntentRequiredException(EmailActivity.CreateIntent(this.Application as Application,
+                    (FlowParameters)this.Arguments!, id)!, 106)));
                 break;
-            case "phone":
+
+            case AuthUI.PhoneProvider:
                 var args = new Bundle();
                 args.PutString("extra_phone_number", id);
-                this.SetResult(Model.Resource.ForFailure(new IntentRequiredException(PhoneActivity.CreateIntent(this.Application as Application, (FlowParameters)this.Arguments, args), 107)));
+                this.SetResult(Model.Resource.ForFailure(
+                    new IntentRequiredException(PhoneActivity.CreateIntent(this.Application as Application,
+                    (FlowParameters)this.Arguments!, args)!, 107)));
                 break;
 
             default:
-                this.SetResult(Model.Resource.ForFailure(new IntentRequiredException(SingleSignInActivity.CreateIntent(this.Application as Application, (FlowParameters)this.Arguments, new User.Builder(provider, id).Build()), 109)));
+                this.SetResult(Model.Resource.ForFailure(
+                    new IntentRequiredException(SingleSignInActivity.CreateIntent(this.Application as Application,
+                    (FlowParameters)this.Arguments!, new User.Builder(provider, id).Build())!, 109)));
                 break;
         }
     }
@@ -87,7 +94,7 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
         return accounts;
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1422:Validate platform compatibility")]
+    [SuppressMessage("Interoperability", "CA1422:Validate platform compatibility", Justification = "<Pending>")]
     public void OnActivityResult(int requestCode, int resultCode, Intent data)
     {
         switch (requestCode)
@@ -105,6 +112,7 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
                 break;
 
             default: break;
+
             case 105 or 106 or 107 or 109:
                 if (resultCode == 113 || resultCode == 114)
                 {
@@ -134,7 +142,7 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
 
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1422:Validate platform compatibility")]
+    [SuppressMessage("Interoperability", "CA1422:Validate platform compatibility", Justification = "<Pending>")]
     private async void HandleCredential(Credential credential)
     {
         var id = credential.Id;
@@ -145,35 +153,32 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
             if (identity == null)
             {
                 this.StartAuthMethodChoice();
+                return;
             }
-            else
-            {
-                this.RedirectSignIn(ProviderUtils.AccountTypeToProviderId(credential.AccountType), id);
-            }
+            this.RedirectSignIn(ProviderUtils.AccountTypeToProviderId(credential.AccountType), id);
+            return;
         }
-        else
+
+        var response = new IdpResponse.Builder(new User.Builder(AuthUI.PasswordProvider, id)!.Build()!)!.Build();
+        this.SetResult(Model.Resource.ForLoading());
+        var task = this.Auth!.SignInWithEmailAndPasswordAsync(id, password);
+        var result = await task;
+        if (task.IsCompletedSuccessfully)
         {
-            var response = new IdpResponse.Builder(new User.Builder(AuthUI.PasswordProvider, id)!.Build())!.Build();
-            this.SetResult(Model.Resource.ForLoading());
-            var task = this.Auth!.SignInWithEmailAndPasswordAsync(id, password);
-            var result = await task;
-            if (task.IsCompletedSuccessfully)
-            {
-                this.HandleSuccess(response, result);
-            }
-            else if (task.IsFaulted)
-            {
-                if (task.Exception is FirebaseAuthInvalidUserException || task.Exception is FirebaseAuthInvalidCredentialsException)
-                {
-                    await GoogleApiUtils.GetCredentialsClient((this.Application as Application)!).Delete(credential);
-                }
-
-                this.StartAuthMethodChoice();
-            }
+            this.HandleSuccess(response!, result);
         }
+        else if (task.IsFaulted)
+        {
+#pragma warning disable CS0184 // 'is' expression's given expression is never of the provided type
+            if (task.Exception is FirebaseAuthInvalidUserException || task.Exception is FirebaseAuthInvalidCredentialsException)
+#pragma warning restore CS0184 // 'is' expression's given expression is never of the provided type
+            {
+                await GoogleApiUtils.GetCredentialsClient((this.Application as Application)!).Delete(credential);
+            }
 
+            this.StartAuthMethodChoice();
+        }
     }
-
 
     public async void Start()
     {
