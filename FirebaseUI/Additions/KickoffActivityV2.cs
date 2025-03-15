@@ -5,40 +5,15 @@ using Android.Runtime;
 using AndroidX.Lifecycle;
 using FirebaseUI.Auth.Data.Model;
 using FirebaseUI.Auth.UI;
-using FirebaseUI.Auth.Viewmodel;
+using Java.Lang;
 
 namespace FirebaseUI.Auth.Data.Remote;
 
-public class IdpResponceObserver(KickoffActivityV2 activity) : ResourceObserver(activity)
-{
-    protected override void OnFailure(Java.Lang.Exception e)
-    {
-        switch (e)
-        {
-            case UserCancellationException:
-                activity!.Finish(0, null);
-                break;
-            case FirebaseAuthAnonymousUpgradeException:
-                activity.Finish(0, new Intent().PutExtra("extra_idp_response",
-                    ((FirebaseAuthAnonymousUpgradeException)e).Response));
-                break;
-
-            default:
-                activity.Finish(0, IdpResponse.GetErrorIntent(e));
-                break;
-        }
-    }
-
-    protected override void OnSuccess(Java.Lang.Object p0)
-    {
-        activity.Finish(-1, (p0 as IdpResponse).ToIntent());
-    }
-}
+#pragma warning disable XAOBS001 // Type or member is obsolete
 
 public partial class KickoffActivityV2 : InvisibleActivityBase
 {
-    private SignInKickstarterV2 mKickstarter;
-    public KickoffActivityV2() { }
+    private SignInKickstarterV2? Kickstarter;
 
     public static Intent CreateIntent(Context context, FlowParameters flowParams)
         => CreateBaseIntent(context, typeof(KickoffActivityV2).ToClass(), flowParams)!;
@@ -46,28 +21,30 @@ public partial class KickoffActivityV2 : InvisibleActivityBase
     protected override async void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
-        if (new ViewModelProvider(this).Get(typeof(SignInKickstarterV2).ToClass()) is SignInKickstarterV2 signInKickstarter)
-            this.mKickstarter = signInKickstarter;
+        if (new ViewModelProvider(this).Get(typeof(SignInKickstarterV2).ToClass()) is not SignInKickstarterV2 signInKickstarter)
+            throw new IllegalStateException();
 
-        this.mKickstarter.Init(this.FlowParams);
-        this.mKickstarter.Operation.Observe(this, new IdpResponceObserver(this));
+        this.Kickstarter = signInKickstarter;
 
-        if (this.FlowParams.IsPlayServicesRequired)
+        this.Kickstarter.Init(this.FlowParams);
+        this.Kickstarter!.Operation!.Observe(this, new IdpResponceObserver(this));
+
+        if (this.FlowParams!.IsPlayServicesRequired)
         {
             var checkPlayServicesTask = GoogleApiAvailability.Instance.MakeGooglePlayServicesAvailable(this).AsAsync();
             await checkPlayServicesTask;
 
             if (checkPlayServicesTask.IsCompletedSuccessfully)
             {
-                if (savedInstanceState == null)
-                {
-                    this.mKickstarter.Start();
-                }
+                if (savedInstanceState != null)
+                    return;
+
+                this.Kickstarter.Start();
             }
             else if (checkPlayServicesTask.IsFaulted)
             {
                 this.Finish(0, IdpResponse.GetErrorIntent(new FirebaseUiException(2,
-                    Java.Lang.Throwable.FromException(checkPlayServicesTask.Exception))));
+                    Throwable.FromException(checkPlayServicesTask.Exception))));
             }
         }
     }
@@ -82,16 +59,18 @@ public partial class KickoffActivityV2 : InvisibleActivityBase
     {
         if (requestCode == 106 && (resultCode == 113 || resultCode == 114))
         {
-            this.invalidateEmailLink();
+            this.InvalidateEmailLink();
         }
 
-        this.mKickstarter.OnActivityResult(requestCode, resultCode, data);
+        this.Kickstarter!.OnActivityResult(requestCode, resultCode, data);
     }
 
-    public void invalidateEmailLink()
+    public void InvalidateEmailLink()
     {
-        FlowParameters flowParameters = this.FlowParams;
+        var flowParameters = this.FlowParams!;
         flowParameters.EmailLink = null;
         this.Intent = this.Intent!.PutExtra("extra_flow_params", flowParameters);
     }
 }
+
+#pragma warning restore XAOBS001 // Type or member is obsolete

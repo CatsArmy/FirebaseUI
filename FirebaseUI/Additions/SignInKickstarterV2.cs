@@ -1,5 +1,6 @@
 ﻿using Android.Content;
 using Android.Gms.Auth.Api.Credentials;
+using Android.Gms.Common.Apis;
 using Android.Gms.Extensions;
 using Android.Text;
 using Firebase.Auth;
@@ -10,30 +11,35 @@ using FirebaseUI.Auth.UI.Phone;
 using FirebaseUI.Auth.Util;
 using FirebaseUI.Auth.Util.Data;
 using FirebaseUI.Auth.Viewmodel;
+using Java.Lang;
 
 namespace FirebaseUI.Auth.Data.Remote;
 
 #pragma warning disable XAOBS001 // Type or member is obsolete
+#pragma warning disable CS0618 // Type or member is obsolete
+
 public partial class SignInKickstarterV2(Application application) : SignInViewModelBase(application)
 {
-    private void startAuthMethodChoice()
+    private void StartAuthMethodChoice()
     {
         if (!((FlowParameters)this.Arguments!).ShouldShowProviderChoice())
         {
+
             AuthUI.IdpConfig firstIdpConfig = ((FlowParameters)this.Arguments).DefaultOrFirstProvider!;
             switch (firstIdpConfig!.ProviderId)
             {
-                case "emailLink":
-                case "password":
+                case "password" or AuthUI.EmailLinkProvider:
                     this.SetResult(Model.Resource.ForFailure(new IntentRequiredException(EmailActivity.CreateIntent(
                         this.Application as Application, (FlowParameters)this.Arguments)!, 106)));
                     break;
+
                 case "phone":
                     this.SetResult(Model.Resource.ForFailure(new IntentRequiredException(PhoneActivity.CreateIntent
                         (this.Application as Application, (FlowParameters)this.Arguments, firstIdpConfig.Params)!, 107)));
                     break;
+
                 default:
-                    this.redirectSignIn(default, Java.Lang.String.ValueOf(null));
+                    this.RedirectSignIn(default, Java.Lang.String.ValueOf(null));
                     break;
             }
             return;
@@ -43,42 +49,45 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
             this.Application as Application, (FlowParameters)this.Arguments)!, 105)));
     }
 
-    private void redirectSignIn(String provider, String id)
+    private void RedirectSignIn(string? provider, string id)
     {
+        if (provider is null)
+            return;
+
         switch (provider)
         {
             case "password":
                 this.SetResult(Model.Resource.ForFailure(new IntentRequiredException(EmailActivity.CreateIntent(this.Application as Application, (FlowParameters)this.Arguments, id), 106)));
                 break;
             case "phone":
-                Bundle args = new Bundle();
+                var args = new Bundle();
                 args.PutString("extra_phone_number", id);
                 this.SetResult(Model.Resource.ForFailure(new IntentRequiredException(PhoneActivity.CreateIntent(this.Application as Application, (FlowParameters)this.Arguments, args), 107)));
                 break;
 
             default:
-                this.SetResult(Model.Resource.ForFailure(new IntentRequiredException(SingleSignInActivity.CreateIntent(this.Application as Application, (FlowParameters)this.Arguments, (new User.Builder(provider, id)).Build()), 109)));
+                this.SetResult(Model.Resource.ForFailure(new IntentRequiredException(SingleSignInActivity.CreateIntent(this.Application as Application, (FlowParameters)this.Arguments, new User.Builder(provider, id).Build()), 109)));
                 break;
         }
-
     }
 
-    private List<string> getCredentialAccountTypes()
+    private List<string> GetCredentialAccountTypes()
     {
         List<string> accounts = [];
 
-        foreach (AuthUI.IdpConfig idpConfig in ((FlowParameters)this.Arguments).Providers)
+        foreach (AuthUI.IdpConfig idpConfig in (this.Arguments as FlowParameters)!.Providers)
         {
             var providerId = idpConfig.ProviderId;
-            if (providerId.Equals("google.com"))
+            if (providerId == AuthUI.GoogleProvider)
             {
-                accounts.Add(ProviderUtils.ProviderIdToAccountType(providerId));
+                accounts.Add(ProviderUtils.ProviderIdToAccountType(providerId)!);
             }
         }
 
         return accounts;
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1422:Validate platform compatibility")]
     public void OnActivityResult(int requestCode, int resultCode, Intent data)
     {
         switch (requestCode)
@@ -86,10 +95,10 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
             case 101:
                 if (resultCode == -1)
                 {
-                    this.handleCredential((Credential)data.GetParcelableExtra("com.google.android.gms.credentials.Credential"));
+                    this.HandleCredential((data.GetParcelableExtra("com.google.android.gms.credentials.Credential") as Credential)!);
                     break;
                 }
-                this.startAuthMethodChoice();
+                this.StartAuthMethodChoice();
                 break;
 
             case 102 or 103 or 104 or 108:
@@ -99,7 +108,7 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
             case 105 or 106 or 107 or 109:
                 if (resultCode == 113 || resultCode == 114)
                 {
-                    this.startAuthMethodChoice();
+                    this.StartAuthMethodChoice();
                     return;
                 }
 
@@ -125,7 +134,8 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
 
     }
 
-    private async void handleCredential(Credential credential)
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1422:Validate platform compatibility")]
+    private async void HandleCredential(Credential credential)
     {
         var id = credential.Id;
         var password = credential.Password;
@@ -134,18 +144,18 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
             var identity = credential.AccountType;
             if (identity == null)
             {
-                this.startAuthMethodChoice();
+                this.StartAuthMethodChoice();
             }
             else
             {
-                this.redirectSignIn(ProviderUtils.AccountTypeToProviderId(credential.AccountType), id);
+                this.RedirectSignIn(ProviderUtils.AccountTypeToProviderId(credential.AccountType), id);
             }
         }
         else
         {
-            var response = (new IdpResponse.Builder((new User.Builder("password", id)).Build())!).Build();
+            var response = new IdpResponse.Builder(new User.Builder(AuthUI.PasswordProvider, id)!.Build())!.Build();
             this.SetResult(Model.Resource.ForLoading());
-            var task = this.Auth.SignInWithEmailAndPasswordAsync(id, password);
+            var task = this.Auth!.SignInWithEmailAndPasswordAsync(id, password);
             var result = await task;
             if (task.IsCompletedSuccessfully)
             {
@@ -155,10 +165,10 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
             {
                 if (task.Exception is FirebaseAuthInvalidUserException || task.Exception is FirebaseAuthInvalidCredentialsException)
                 {
-                    GoogleApiUtils.GetCredentialsClient(this.Application as Application).Delete(credential);
+                    await GoogleApiUtils.GetCredentialsClient((this.Application as Application)!).Delete(credential);
                 }
 
-                this.startAuthMethodChoice();
+                this.StartAuthMethodChoice();
             }
         }
 
@@ -180,48 +190,53 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
             var authResult = await pendingResultTask;
             if (pendingResultTask.IsCompletedSuccessfully)
             {
-                IdpResponse response = (new IdpResponse.Builder((new User.Builder(authResult.Credential?.Provider,
-                    authResult.User?.Email)).Build()!)).Build()!;
+                var response = new IdpResponse.Builder(new User.Builder(authResult.Credential?.Provider!,
+                    authResult.User?.Email).Build()!).Build()!;
                 this.HandleSuccess(response, authResult);
             }
+
             if (pendingResultTask.IsFaulted)
-                this.SetResult(Model.Resource.ForFailure(new Java.Lang.Exception(Throwable.FromException(pendingResultTask.Exception))));
+                this.SetResult(Model.Resource.ForFailure(new(Throwable.FromException(pendingResultTask.Exception))));
+            return;
         }
-        else
+
+        var supportPasswords = null != ProviderUtils.GetConfigFromIdps((this.Arguments as FlowParameters)!.Providers
+            as IList<AuthUI.IdpConfig>, AuthUI.PasswordProvider);
+        var accountTypes = this.GetCredentialAccountTypes();
+        if (!((FlowParameters)this.Arguments).EnableCredentials || !supportPasswords && accountTypes.Count <= 0)
         {
-            bool supportPasswords = ProviderUtils.GetConfigFromIdps(((FlowParameters)this.Arguments).Providers, "password") != null;
-            List<string> accountTypes = this.getCredentialAccountTypes();
-            bool willRequestCredentials = supportPasswords || accountTypes.Count > 0;
-            if (((FlowParameters)this.Arguments).EnableCredentials && willRequestCredentials)
+            this.StartAuthMethodChoice();
+            return;
+        }
+
+        this.SetResult(Model.Resource.ForLoading());
+        await GoogleApiUtils.GetCredentialsClient((this.Application as Application)!)
+            .Request(new CredentialRequest.Builder()
+            .SetPasswordLoginSupported(supportPasswords)
+            .SetAccountTypes([.. accountTypes]).Build())
+            .AddOnCompleteListener(new OnCompleteListener((task) =>
             {
-                this.SetResult(Model.Resource.ForLoading());
-                GoogleApiUtils.GetCredentialsClient(this.Application as Application)
-                    .Request((new CredentialRequest.Builder())
-                    .SetPasswordLoginSupported(supportPasswords)
-                    .SetAccountTypes(accountTypes.ToArray()).Build())
-                    .addOnCompleteListener((task)-> {
-                    try
+                try
+                {
+                    this.HandleCredential((task.GetResult(typeof(ApiException).ToClass()) as CredentialRequestResponse)!.Credential);
+                }
+                catch (ResolvableApiException e)
+                {
+                    if (e.StatusCode != 6)
                     {
-                        this.handleCredential(((CredentialRequestResponse)task.getResult(ApiException.class)).getCredential());
-                                } catch (ResolvableApiException e) {
-                                    if (e.getStatusCode() == 6) {
-                                        this.SetResult(Model.Resource.ForFailure(new PendingIntentRequiredException(e.getResolution(), 101)));
-                                    } else
-{
-    this.startAuthMethodChoice();
-}
-                                } catch (ApiException var4) {
-                                    this.startAuthMethodChoice();
-                                }
-
-                            });
-                        } else
-{
-    this.startAuthMethodChoice();
-}
-
+                        this.StartAuthMethodChoice();
+                        return;
                     }
 
+                    this.SetResult(Model.Resource.ForFailure(new PendingIntentRequiredException(e.Resolution, 101)));
+                    return;
+                }
+                catch (ApiException)
+                {
+                    this.StartAuthMethodChoice();
+                }
+            })).AsAsync();
     }
 }
 #pragma warning restore XAOBS001 // Type or member is obsolete
+#pragma warning restore CS0618 // Type or member is obsolete
