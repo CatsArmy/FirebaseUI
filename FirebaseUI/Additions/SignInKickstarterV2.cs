@@ -1,4 +1,17 @@
-﻿namespace FirebaseUI.Auth.Data.Remote;
+﻿using Android.Content;
+using Android.Gms.Auth.Api.Credentials;
+using Android.Gms.Extensions;
+using Android.Text;
+using Firebase.Auth;
+using FirebaseUI.Auth.Data.Model;
+using FirebaseUI.Auth.UI.Email;
+using FirebaseUI.Auth.UI.Idp;
+using FirebaseUI.Auth.UI.Phone;
+using FirebaseUI.Auth.Util;
+using FirebaseUI.Auth.Util.Data;
+using FirebaseUI.Auth.Viewmodel;
+
+namespace FirebaseUI.Auth.Data.Remote;
 
 #pragma warning disable XAOBS001 // Type or member is obsolete
 public partial class SignInKickstarterV2(Application application) : SignInViewModelBase(application)
