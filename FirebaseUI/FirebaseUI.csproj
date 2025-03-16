@@ -5,11 +5,6 @@
     <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <!--<MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
-    <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
-    <AndroidUseIntermediateDesignerFile>True</AndroidUseIntermediateDesignerFile>
-    <AndroidResgenFile>Resource.designer.cs</AndroidResgenFile>-->
     <!--
       Enable trim analyzers for Android class libraries.
       To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming
@@ -24,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Xamarin.Firebase.Auth" Version="122.3.1.4" />
+    <PackageReference Include="Xamarin.Firebase.Functions" Version="121.1.1" />
     <PackageReference Include="Xamarin.Firebase.Storage" Version="121.0.1.2" />
     <PackageReference Include="Xamarin.AndroidX.Credentials.PlayServicesAuth" Version="1.2.2.4" />
     <PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="120.7.0.3" />
