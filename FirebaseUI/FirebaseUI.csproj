@@ -5,6 +5,11 @@
     <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!--<MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
+    <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
+    <AndroidUseLatestPlatformSdk>False</AndroidUseLatestPlatformSdk>
+    <AndroidUseIntermediateDesignerFile>True</AndroidUseIntermediateDesignerFile>
+    <AndroidResgenFile>Resource.designer.cs</AndroidResgenFile>-->
     <!--
       Enable trim analyzers for Android class libraries.
       To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming
@@ -42,10 +47,15 @@
   <ItemGroup>
     <AndroidNamespaceReplacement Include="Com.Firebase.UI" Replacement="FirebaseUI" />
     
+    <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-auth:8.0.2" /> <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-storage:8.0.2" />
+    
     <AndroidLibrary Manifest="firebase-ui-auth-8.0.2.pom" Update="firebase-ui-auth-8.0.2.aar" />
     <AndroidLibrary Manifest="firebase-ui-storage-8.0.2.pom" Update="firebase-ui-storage-8.0.2.aar" />
     
     <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-auth:8.0.2" /> <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-storage:8.0.2" />
-</ItemGroup>
+</ItemGroup>  
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
 
 </Project>

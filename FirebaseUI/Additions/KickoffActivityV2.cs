@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using Android.Gms.Common;
-using Android.Gms.Extensions;
 using Android.Runtime;
 using AndroidX.Lifecycle;
 using FirebaseUI.Auth.Data.Model;
@@ -11,17 +10,18 @@ namespace FirebaseUI.Auth.Data.Remote;
 
 #pragma warning disable XAOBS001 // Type or member is obsolete
 
+[Activity()]
 public partial class KickoffActivityV2 : InvisibleActivityBase
 {
     private SignInKickstarterV2? Kickstarter;
 
     public static Intent CreateIntent(Context context, FlowParameters flowParams)
-        => CreateBaseIntent(context, typeof(KickoffActivityV2).ToClass(), flowParams)!;
+        => InvisibleActivityBase.CreateBaseIntent(context, typeof(KickoffActivityV2).Class(), flowParams)!;
 
-    protected override async void OnCreate(Bundle? savedInstanceState)
+    protected override void OnCreate(Bundle? savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
-        if (new ViewModelProvider(this).Get(typeof(SignInKickstarterV2).ToClass()) is not SignInKickstarterV2 signInKickstarter)
+        if (new ViewModelProvider(this).Get(typeof(SignInKickstarterV2).Class()) is not SignInKickstarterV2 signInKickstarter)
             throw new IllegalStateException();
 
         this.Kickstarter = signInKickstarter;
@@ -29,24 +29,23 @@ public partial class KickoffActivityV2 : InvisibleActivityBase
         this.Kickstarter.Init(this.FlowParams);
         this.Kickstarter!.Operation!.Observe(this, new IdpResponceObserver(this));
 
-        if (this.FlowParams!.IsPlayServicesRequired)
+        if (!this.FlowParams!.IsPlayServicesRequired)
         {
-            var checkPlayServicesTask = GoogleApiAvailability.Instance.MakeGooglePlayServicesAvailable(this).AsAsync();
-            await checkPlayServicesTask;
-
-            if (checkPlayServicesTask.IsCompletedSuccessfully)
-            {
-                if (savedInstanceState != null)
-                    return;
-
-                this.Kickstarter.Start();
-            }
-            else if (checkPlayServicesTask.IsFaulted)
-            {
-                this.Finish(0, IdpResponse.GetErrorIntent(new FirebaseUiException(2,
-                    Throwable.FromException(checkPlayServicesTask.Exception))));
-            }
+            return;
         }
+
+        var checkPlayServicesTask = GoogleApiAvailability.Instance.MakeGooglePlayServicesAvailable(this)
+        .AddOnSuccessListener(this, new OnSuccessListener((@void) =>
+        {
+            if (savedInstanceState != null)
+                return;
+
+            this.Kickstarter.Start();
+        }))
+        .AddOnFailureListener(this, new OnFailureListener((e) =>
+        {
+            this.Finish(0, IdpResponse.GetErrorIntent(new FirebaseUiException(2, e)));
+        }));
     }
 
     protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent? data)

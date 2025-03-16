@@ -2,6 +2,6 @@
 
 public static class Extensions
 {
-    public static Java.Lang.Class ToClass(this Type type) => Java.Lang.Class.FromType(type);
+    public static Java.Lang.Class Class(this Type type) => Java.Lang.Class.FromType(type);
 
 }
