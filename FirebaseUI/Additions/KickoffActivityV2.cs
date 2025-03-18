@@ -29,18 +29,16 @@ public partial class KickoffActivityV2 : InvisibleActivityBase
         this.Kickstarter.Init(this.FlowParams);
         this.Kickstarter!.Operation!.Observe(this, new IdpResponceObserver(this));
 
-        if (!this.FlowParams!.IsPlayServicesRequired)
+        var checkPlayServicesTask = this.FlowParams!.IsPlayServicesRequired switch
         {
-            return;
-        }
+            true => GoogleApiAvailability.Instance.MakeGooglePlayServicesAvailable(this),
+            false => Android.Gms.Tasks.TasksClass.ForResult(null as Java.Lang.Void)
+        };
 
-        var checkPlayServicesTask = GoogleApiAvailability.Instance.MakeGooglePlayServicesAvailable(this)
-        .AddOnSuccessListener(this, new OnSuccessListener((@void) =>
+        checkPlayServicesTask.AddOnSuccessListener(this, new OnSuccessListener((@void) =>
         {
-            if (savedInstanceState != null)
-                return;
-
-            this.Kickstarter.Start();
+            if (savedInstanceState == null)
+                this.Kickstarter.Start();
         }))
         .AddOnFailureListener(this, new OnFailureListener((e) =>
         {

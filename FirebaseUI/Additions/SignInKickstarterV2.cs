@@ -19,6 +19,99 @@ namespace FirebaseUI.Auth.Data.Remote;
 
 public partial class SignInKickstarterV2(Application application) : SignInViewModelBase(application)
 {
+    private IList<AuthUI.IdpConfig> Providers
+    {
+        get
+        {
+            IList<AuthUI.IdpConfig> providers = [];
+            foreach (AuthUI.IdpConfig idpConfig in (this.Arguments as FlowParameters)!.Providers)
+            {
+                providers.Add(idpConfig);
+            }
+
+            return providers;
+        }
+    }
+
+    private IList<string> CredentialAccountTypes
+    {
+        get
+        {
+            IList<string> accounts = [];
+
+            foreach (AuthUI.IdpConfig idpConfig in (this.Arguments as FlowParameters)!.Providers)
+            {
+                var providerId = idpConfig.ProviderId;
+                if (providerId == AuthUI.GoogleProvider)
+                {
+                    accounts.Add(ProviderUtils.ProviderIdToAccountType(providerId)!);
+                }
+            }
+
+            return accounts;
+        }
+    }
+
+    public void Start()
+    {
+        if (!TextUtils.IsEmpty(((FlowParameters)this.Arguments!).EmailLink))
+        {
+            this.SetResult(Model.Resource.ForFailure(new IntentRequiredException(EmailLinkCatcherActivity.CreateIntent(
+                this.Application as Application, (FlowParameters)this.Arguments)!, 106)));
+            return;
+        }
+
+        var pendingResultTask = this.Auth?.GetPendingAuthResult(); //<IAuthResult>
+        if (pendingResultTask != null)
+        {
+            pendingResultTask
+            .AddOnSuccessListener(new OnSuccessListener((result) =>
+            {
+                var authResult = (result as IAuthResult)!;
+                var response = new IdpResponse.Builder(new User.Builder(authResult.Credential?.Provider!,
+                    authResult.User?.Email).Build()!).Build()!;
+                this.HandleSuccess(response, authResult);
+            }))
+            .AddOnFailureListener(new OnFailureListener((e)
+                => this.SetResult(Model.Resource.ForFailure(e))));
+
+            return;
+        }
+
+        var supportPasswords = null != ProviderUtils.GetConfigFromIdps(this.Providers, AuthUI.PasswordProvider);
+        var accountTypes = this.CredentialAccountTypes;
+        if (!((FlowParameters)this.Arguments).EnableCredentials || !supportPasswords && accountTypes.Count <= 0)
+        {
+            this.StartAuthMethodChoice();
+            return;
+        }
+
+        this.SetResult(Model.Resource.ForLoading());
+        GoogleApiUtils.GetCredentialsClient((this.Application as Application)!).Request(new CredentialRequest.Builder()
+        .SetPasswordLoginSupported(supportPasswords).SetAccountTypes([.. accountTypes]).Build())
+        .AddOnCompleteListener(new OnCompleteListener((task) =>
+        {
+            try
+            {
+                this.HandleCredential((task.GetResult(typeof(ApiException).Class()) as CredentialRequestResponse)!.Credential);
+            }
+            catch (ResolvableApiException e)
+            {
+                if (e.StatusCode != 6)
+                {
+                    this.StartAuthMethodChoice();
+                    return;
+                }
+
+                this.SetResult(Model.Resource.ForFailure(new PendingIntentRequiredException(e.Resolution, 101)));
+            }
+            catch (ApiException)
+            {
+                this.StartAuthMethodChoice();
+            }
+        }));
+    }
+
     private void StartAuthMethodChoice()
     {
         if (!((FlowParameters)this.Arguments!).ShouldShowProviderChoice())
@@ -51,6 +144,7 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
     {
         if (provider is null)
             return;
+
         switch (provider)
         {
             case AuthUI.PasswordProvider:
@@ -73,36 +167,6 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
                     (FlowParameters)this.Arguments!, new User.Builder(provider, id).Build())!, 109)));
                 break;
         }
-    }
-
-    private IList<AuthUI.IdpConfig> Providers
-    {
-        get
-        {
-            IList<AuthUI.IdpConfig> providers = [];
-            foreach (AuthUI.IdpConfig idpConfig in (this.Arguments as FlowParameters)!.Providers)
-            {
-                providers.Add(idpConfig);
-            }
-
-            return providers;
-        }
-    }
-
-    private IList<string> GetCredentialAccountTypes()
-    {
-        IList<string> accounts = [];
-
-        foreach (AuthUI.IdpConfig idpConfig in (this.Arguments as FlowParameters)!.Providers)
-        {
-            var providerId = idpConfig.ProviderId;
-            if (providerId == AuthUI.GoogleProvider)
-            {
-                accounts.Add(ProviderUtils.ProviderIdToAccountType(providerId)!);
-            }
-        }
-
-        return accounts;
     }
 
     [SuppressMessage("Interoperability", "CA1422:Validate platform compatibility")]
@@ -184,66 +248,6 @@ public partial class SignInKickstarterV2(Application application) : SignInViewMo
             }
 
             this.StartAuthMethodChoice();
-        }));
-    }
-
-    public void Start()
-    {
-        if (!TextUtils.IsEmpty(((FlowParameters)this.Arguments!).EmailLink))
-        {
-            this.SetResult(Model.Resource.ForFailure(new IntentRequiredException(EmailLinkCatcherActivity.CreateIntent(
-                this.Application as Application, (FlowParameters)this.Arguments)!, 106)));
-            return;
-        }
-
-        var pendingResultTask = this.Auth?.GetPendingAuthResult(); //<IAuthResult>
-        if (pendingResultTask != null)
-        {
-            pendingResultTask
-            .AddOnSuccessListener(new OnSuccessListener((result) =>
-            {
-                var authResult = (result as IAuthResult)!;
-                var response = new IdpResponse.Builder(new User.Builder(authResult.Credential?.Provider!,
-                authResult.User?.Email).Build()!).Build()!;
-                this.HandleSuccess(response, authResult);
-            }))
-            .AddOnFailureListener(new OnFailureListener((e)
-                => this.SetResult(Model.Resource.ForFailure(e))));
-
-            return;
-        }
-
-        var supportPasswords = null != ProviderUtils.GetConfigFromIdps(this.Providers, AuthUI.PasswordProvider);
-        var accountTypes = this.GetCredentialAccountTypes();
-        if (!((FlowParameters)this.Arguments).EnableCredentials || !supportPasswords && accountTypes.Count <= 0)
-        {
-            this.StartAuthMethodChoice();
-            return;
-        }
-
-        this.SetResult(Model.Resource.ForLoading());
-        GoogleApiUtils.GetCredentialsClient((this.Application as Application)!).Request(new CredentialRequest.Builder()
-        .SetPasswordLoginSupported(supportPasswords).SetAccountTypes([.. accountTypes]).Build())
-        .AddOnCompleteListener(new OnCompleteListener((task) =>
-        {
-            try
-            {
-                this.HandleCredential((task.GetResult(typeof(ApiException).Class()) as CredentialRequestResponse)!.Credential);
-            }
-            catch (ResolvableApiException e)
-            {
-                if (e.StatusCode != 6)
-                {
-                    this.StartAuthMethodChoice();
-                    return;
-                }
-
-                this.SetResult(Model.Resource.ForFailure(new PendingIntentRequiredException(e.Resolution, 101)));
-            }
-            catch (ApiException)
-            {
-                this.StartAuthMethodChoice();
-            }
         }));
     }
 }

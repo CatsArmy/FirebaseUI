@@ -14,7 +14,6 @@ public sealed partial class AuthUI
     public const string PasswordProvider = "password";
     public const string PhoneProvider = "phone";
     public const string GoogleProvider = "google.com";
-    //public sealed partial class IdpConfig { }
 
     public class AuthIntent
     {

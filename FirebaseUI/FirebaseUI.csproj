@@ -18,11 +18,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Firebase.Auth" Version="122.3.1.4" />
-    <PackageReference Include="Xamarin.Firebase.Functions" Version="121.1.1" />
     <PackageReference Include="Xamarin.Firebase.Storage" Version="121.0.1.2" />
+
+    <!--  Remove in androidx.credentials_manager branch  -->
+    <PackageReference Include="Xamarin.Firebase.Auth" Version="122.3.1.4" />
     <PackageReference Include="Xamarin.AndroidX.Credentials.PlayServicesAuth" Version="1.2.2.4" />
     <PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="120.7.0.3" />
+    
+    <!--  Remove in main branch  -->
+    <!--<PackageReference Include="Xamarin.Firebase.Auth" Version="123.2.0" />-->
 
     <PackageReference Include="Xamarin.Android.Glide" Version="4.16.0.11" />
     <PackageReference Include="Xamarin.Android.Glide.AVIF.Integration" Version="4.16.0.11" />
@@ -50,6 +54,7 @@
     
     <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-auth:8.0.2" /> <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-storage:8.0.2" />
 </ItemGroup>  
+  
   <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
