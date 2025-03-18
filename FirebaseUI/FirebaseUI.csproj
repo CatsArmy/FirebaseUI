@@ -18,15 +18,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!--<PackageReference Include="Xamarin.Firebase.Auth" Version="123.2.0" />
     <PackageReference Include="Xamarin.Firebase.Storage" Version="121.0.1.2" />
-
-    <!--  Remove in androidx.credentials_manager branch  -->
-    <PackageReference Include="Xamarin.Firebase.Auth" Version="122.3.1.4" />
-    <PackageReference Include="Xamarin.AndroidX.Credentials.PlayServicesAuth" Version="1.2.2.4" />
-    <PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="120.7.0.3" />
-    
-    <!--  Remove in main branch  -->
-    <!--<PackageReference Include="Xamarin.Firebase.Auth" Version="123.2.0" />-->
+    <PackageReference Include="Xamarin.Firebase.Firestore" Version="125.1.2" />
+    <PackageReference Include="Xamarin.Firebase.Database" Version="121.0.0.4" />
 
     <PackageReference Include="Xamarin.Android.Glide" Version="4.16.0.11" />
     <PackageReference Include="Xamarin.Android.Glide.AVIF.Integration" Version="4.16.0.11" />
@@ -40,23 +35,24 @@
     <PackageReference Include="Xamarin.AndroidX.ConstraintLayout" Version="2.2.1" />
     <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0.31" />
     <PackageReference Include="Xamarin.AndroidX.Lifecycle.Extensions" Version="2.2.0.31" />
-    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.12.0.2" />
+    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.12.0.2" />-->
   </ItemGroup>
 
   <!-- Include format is {GroupId}:{ArtifactId} -->  
   <ItemGroup>
     <AndroidNamespaceReplacement Include="Com.Firebase.UI" Replacement="FirebaseUI" />
-    
-    <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-auth:8.0.2" /> <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-storage:8.0.2" />
-    
-    <AndroidLibrary Manifest="firebase-ui-auth-8.0.2.pom" Update="firebase-ui-auth-8.0.2.aar" />
-    <AndroidLibrary Manifest="firebase-ui-storage-8.0.2.pom" Update="firebase-ui-storage-8.0.2.aar" />
-    
-    <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-auth:8.0.2" /> <AndroidAdditionalJavaManifest Include="firebase-bom-28.2.0.pom" JavaArtifact="com.firebaseui:firebase-ui-storage:8.0.2" />
-</ItemGroup>  
-  
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
 
+    <!--<AndroidAdditionalJavaManifest Include="firebase-bom-33.9.0.pom" JavaArtifact="com.firebaseui:firebase-ui-auth:9.0.0" />
+    <AndroidLibrary Manifest="firebase-ui-auth-9.0.0.pom" Update="firebase-ui-auth-9.0.0.aar" />
+
+    <AndroidAdditionalJavaManifest Include="firebase-bom-33.9.0.pom" JavaArtifact="com.firebaseui:firebase-ui-storage:9.0.0" />
+    <AndroidLibrary Manifest="firebase-ui-storage-9.0.0.pom" Update="firebase-ui-storage-9.0.0.aar" />-->
+    
+    <AndroidAdditionalJavaManifest Include="firebase-bom-33.9.0.pom" JavaArtifact="com.firebaseui:firebase-ui-firestore:9.0.0" />
+    <AndroidLibrary Manifest="firebase-ui-firestore-9.0.0.pom" Update="firebase-ui-firestore-9.0.0.aar" />
+    
+<!--    <AndroidAdditionalJavaManifest Include="firebase-bom-33.9.0.pom" JavaArtifact="com.firebaseui:firebase-ui-database:9.0.0" />
+    <AndroidLibrary Manifest="firebase-ui-database-9.0.0.pom" Update="firebase-ui-database-9.0.0.aar" />-->
+
+</ItemGroup>
 </Project>

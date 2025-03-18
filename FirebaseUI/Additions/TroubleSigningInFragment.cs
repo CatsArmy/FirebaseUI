@@ -1,9 +1,9 @@
-﻿namespace FirebaseUI.Auth.UI.Email;
+﻿//namespace FirebaseUI.Auth.UI.Email;
 
-public partial class TroubleSigningInFragment
-{
-    public interface IResendEmailListener
-    {
-        public void OnClickResendEmail(string var1);
-    }
-}
+//public partial class TroubleSigningInFragment
+//{
+//    public interface IResendEmailListener
+//    {
+//        public void OnClickResendEmail(string var1);
+//    }
+//}
