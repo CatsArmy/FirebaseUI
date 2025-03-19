@@ -2,7 +2,7 @@
   <PropertyGroup>
     <RootNamespace>FirebaseUI</RootNamespace>
     <TargetFramework>net9.0-android</TargetFramework>
-    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion>23</SupportedOSPlatformVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <!--
@@ -17,6 +17,18 @@
     -->
   </PropertyGroup>
   
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">        
+  <RunAOTCompilation>True</RunAOTCompilation>
+  <IsAotCompatible>True</IsAotCompatible>
+  <DebugType>portable</DebugType>
+    <!--
+      Enables trim analyzers and full trimming during Release mode.
+      To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/trimming-options#trimming-granularity
+    -->
+  <TrimMode>full</TrimMode>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Xamarin.Firebase.Auth" Version="123.2.0" />
     <PackageReference Include="Xamarin.Firebase.Storage" Version="121.0.1.2" />
@@ -37,18 +49,16 @@
     <PackageReference Include="Xamarin.AndroidX.Lifecycle.Extensions" Version="2.2.0.31" />
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.12.0.2" />
    
-    <PackageReference Include="Xamarin.Kotlin.StdLib" Version="2.0.21.2" />
     <PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.3.0.1" />
     <PackageReference Include="Xamarin.KotlinX.Coroutines.Android" Version="1.9.0.2" />
     <PackageReference Include="Xamarin.AndroidX.Core.Core.Ktx" Version="1.15.0.2" />
     <PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModel.Ktx" Version="2.8.7.2" />
-    <PackageReference Include="Xamarin.KotlinX.Coroutines.Core" Version="1.9.0.2" />
     <PackageReference Include="Xamarin.GoogleAndroid.Libraries.Identity.GoogleId" Version="1.1.0.8" />
     <PackageReference Include="Xamarin.AndroidX.RecyclerView" Version="1.4.0" />
     <PackageReference Include="Xamarin.AndroidX.Annotation" Version="1.9.1.2" />
     <PackageReference Include="Xamarin.AndroidX.Lifecycle.Runtime" Version="2.8.7.2" />
     <PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModel" Version="2.8.7.2" />
-    <PackageReference Include="Xamarin.Facebook.Login.Android" Version="11.2.0.1" />
+    <!--<PackageReference Include="Xamarin.Facebook.Login.Android" Version="11.2.0.1" />-->
   </ItemGroup>
 
   <ItemGroup>

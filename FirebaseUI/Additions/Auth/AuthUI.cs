@@ -1,9 +1,15 @@
 ﻿using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using AndroidX.Annotations;
 using Firebase;
 using Firebase.Auth;
 using FirebaseUI.Auth.Data.Model;
 using FirebaseUI.Auth.Data.Remote;
+using FirebaseUI.Auth.Util;
 using Java.Lang;
+using Java.Util;
+using static FirebaseUI.Auth.AuthUI;
 
 namespace FirebaseUI.Auth;
 
@@ -15,130 +21,199 @@ public sealed partial class AuthUI
     public const string PhoneProvider = "phone";
     public const string GoogleProvider = "google.com";
 
-    public class AuthIntent
+    public SignInIntentBuilder CreateSignInIntentBuilder() => new SignInIntentBuilder(this);
+
+    public abstract partial class AuthIntentBuilder(AuthUI authUI)
     {
-        public const int DefaultLogo = -1;
+        public List<IdpConfig> Providers = [];
+        public IdpConfig? DefaultProvider = null;
+        public int Logo = -1;
+        public int Theme = AuthUI.DefaultTheme;
+        public string? TosUrl;
+        public string? PrivacyPolicyUrl;
+        public bool AlwaysShowProviderChoice = false;
+        public bool LockOrientation = false;
+        public bool EnableCredentials = true;
+        public AuthMethodPickerLayout? AuthMethodPickerLayout = null;
+        public ActionCodeSettings? PasswordSettings = null;
+        protected abstract FlowParameters FlowParams { get; }
 
-        public List<IdpConfig> Providers
+        public AuthIntentBuilder SetTheme(int theme)
         {
-            get; set
+            this.Theme = Preconditions.CheckValidStyle(authUI.App.ApplicationContext, theme,
+                "theme identifier is unknown or not a style definition", []);
+            return (AuthIntentBuilder)this;
+        }
+
+
+        public AuthIntentBuilder SetLogo(int logo)
+        {
+            this.Logo = logo;
+            return (AuthIntentBuilder)this;
+        }
+
+        /** @deprecated */
+        public AuthIntentBuilder SetTosUrl(string? tosUrl)
+        {
+            this.TosUrl = tosUrl;
+            return (AuthIntentBuilder)this;
+        }
+
+        /** @deprecated */
+        public AuthIntentBuilder SetPrivacyPolicyUrl(string? privacyPolicyUrl)
+        {
+            this.PrivacyPolicyUrl = privacyPolicyUrl;
+            return (AuthIntentBuilder)this;
+        }
+
+        public AuthIntentBuilder SetTosAndPrivacyPolicyUrls(string tosUrl, string privacyPolicyUrl)
+        {
+            Preconditions.CheckNotNull(tosUrl, "tosUrl cannot be null", []);
+            Preconditions.CheckNotNull(privacyPolicyUrl, "privacyPolicyUrl cannot be null", []);
+            this.TosUrl = tosUrl;
+            this.PrivacyPolicyUrl = privacyPolicyUrl;
+            return (AuthIntentBuilder)this;
+        }
+
+        public AuthIntentBuilder SetAvailableProviders(List<IdpConfig> idpConfigs)
+        {
+            if (idpConfigs == null)
             {
-                if (value.Count == 1 && value[0].ProviderId == AuthUI.AnonymousProvider)
-                {
-                    throw new IllegalStateException("Sign in as guest cannot be the only sign in method. In this case, sign the user in anonymously your self; no UI is needed.");
-                }
-
-                field.Clear();
-
-                foreach (var config in value)
-                {
-                    if (field.Contains(config))
-                        throw new IllegalArgumentException($"Each provider can only be set once. {config.ProviderId} was set twice.");
-
-                    field.Add(config);
-                }
+                throw new NullPointerException("idpConfigs cannot be null");
             }
-        } = [];
 
-        public IdpConfig? DefaultProvider
-        {
-            get; set
+            if (idpConfigs.Count == 1 && ((IdpConfig)idpConfigs[0]).ProviderId == ("anonymous"))
             {
-                if (value != null)
+                throw new IllegalStateException("Sign in as guest cannot be the only sign in method. In this case, sign the user in anonymously your self; no UI is needed.");
+            }
+            else
+            {
+                this.Providers.Clear();
+
+                foreach (IdpConfig config in idpConfigs)
                 {
-                    if (!this.Providers.Contains(value))
+                    if (this.Providers.Contains(config))
                     {
-                        throw new IllegalStateException("Default provider not in available providers list.");
+                        throw new IllegalArgumentException("Each provider can only be set once. " + config.ProviderId + " was set twice.");
                     }
 
-                    if (this.AlwaysShowProviderChoice)
-                    {
-                        throw new IllegalStateException("Can't set default provider and always show provider choice.");
-                    }
+                    this.Providers.Add(config);
                 }
 
-                field = value;
+                return (AuthIntentBuilder)this;
             }
         }
 
-        public bool AlwaysShowProviderChoice
+        public AuthIntentBuilder SetDefaultProvider(IdpConfig? config)
         {
-            get; set
+            if (config != null)
             {
-                if (value && this.DefaultProvider != null)
+                if (!this.Providers.Contains(config))
                 {
-                    throw new IllegalStateException("Can't show provider choice with a default provider.");
+                    throw new IllegalStateException("Default provider not in available providers list.");
                 }
 
-                field = value;
+                if (this.AlwaysShowProviderChoice)
+                {
+                    throw new IllegalStateException("Can't set default provider and always show provider choice.");
+                }
             }
-        } = false;
 
-        public int Logo { get; set; } = DefaultLogo;
+            this.DefaultProvider = config;
+            return (AuthIntentBuilder)this;
+        }
 
-        public int Theme { get; set; } = AuthUI.DefaultTheme;
+        public AuthIntentBuilder SetCredentialManagerEnabled(bool enableCredentials)
+        {
+            this.EnableCredentials = enableCredentials;
+            return (AuthIntentBuilder)this;
+        }
 
-        public string? TermsOfServiceUrl { get; set; } = null;
+        public AuthIntentBuilder SetAuthMethodPickerLayout(AuthMethodPickerLayout authMethodPickerLayout)
+        {
+            this.AuthMethodPickerLayout = authMethodPickerLayout;
+            return (AuthIntentBuilder)this;
+        }
 
-        public string? PrivacyPolicyUrl { get; set; } = null;
+        public AuthIntentBuilder SetAlwaysShowSignInMethodScreen(bool alwaysShow)
+        {
+            if (alwaysShow && this.DefaultProvider != null)
+            {
+                throw new IllegalStateException("Can't show provider choice with a default provider.");
+            }
+            else
+            {
+                this.AlwaysShowProviderChoice = alwaysShow;
+                return (AuthIntentBuilder)this;
+            }
+        }
 
-        public string? EmailLink { get; set; } = null;
+        public AuthIntentBuilder SetLockOrientation(bool lockOrientation)
+        {
+            this.LockOrientation = lockOrientation;
+            return (AuthIntentBuilder)this;
+        }
 
-        public bool EnableAnonymousUpgrade = false;
+        public AuthIntentBuilder SetResetPasswordSettings(ActionCodeSettings passwordSettings)
+        {
+            this.PasswordSettings = passwordSettings;
+            return (AuthIntentBuilder)this;
+        }
 
-        public bool LockOrientation { get; set; } = false;
-
-        public bool EnableCredentials { get; set; } = true;
-
-        public bool EnableHints { get; set; } = true;
-
-        public AuthMethodPickerLayout? AuthMethodPickerLayout { get; set; } = null;
-
-        public ActionCodeSettings? PasswordSettings { get; set; } = null;
-
-        protected FlowParameters FlowParams => new(FirebaseApp.Instance.Name, this.Providers, this.DefaultProvider,
-            this.Theme, this.Logo, this.TermsOfServiceUrl, this.PrivacyPolicyUrl, this.EnableCredentials, this.EnableHints,
-            this.EnableAnonymousUpgrade, this.AlwaysShowProviderChoice, this.LockOrientation, this.EmailLink, this.PasswordSettings,
-            this.AuthMethodPickerLayout);
-
-        public Intent Build()
+        //@CallSuper
+        public virtual Intent? Build()
         {
             if (this.Providers.Count == 0)
             {
-                this.Providers.Add(new IdpConfig.EmailBuilder().Build());
+                this.Providers.Add((new IdpConfig.EmailBuilder()).Build());
             }
 
-            return KickoffActivityV2.CreateIntent(FirebaseApp.Instance!.ApplicationContext!, this.FlowParams)!;
+            return KickoffActivity.CreateIntent(authUI.App.ApplicationContext, this.FlowParams);
         }
+    }
 
-        public void SetIsSmartLockEnabled(bool enabled) => this.SetIsSmartLockEnabled(enabled, enabled);
+    public partial class SignInIntentBuilder(AuthUI authUI) : AuthIntentBuilder(authUI)
+    {
+        public SignInIntentBuilder() : this(AuthUI.Instance) { }
+        private string? EmailLink;
+        private bool EnableAnonymousUpgrade;
 
-        public void SetIsSmartLockEnabled(bool enableCredentials, bool enableHints)
+        protected override FlowParameters FlowParams => new(authUI.App.Name, this.Providers, this.DefaultProvider,
+            this.Theme, this.Logo, this.TosUrl, this.PrivacyPolicyUrl, this.EnableCredentials, this.EnableAnonymousUpgrade,
+            this.AlwaysShowProviderChoice, this.LockOrientation, this.EmailLink,
+            this.PasswordSettings, this.AuthMethodPickerLayout);
+
+        public SignInIntentBuilder SetEmailLink(string emailLink)
         {
-            this.EnableCredentials = enableCredentials;
-            this.EnableHints = enableHints;
+            this.EmailLink = emailLink;
+            return this;
         }
 
-        public void EnableAnonymousUsersAutoUpgrade()
+        public SignInIntentBuilder EnableAnonymousUsersAutoUpgrade()
         {
             this.EnableAnonymousUpgrade = true;
             this.ValidateEmailBuilderConfig();
+            return this;
         }
 
         private void ValidateEmailBuilderConfig()
         {
-            for (int i = 0; i < this.Providers.Count; i++)
+            for (int i = 0; i < this.Providers.Count; ++i)
             {
-                var config = this.Providers[i];
-                if (config.ProviderId != AuthUI.EmailLinkProvider)
-                    continue;
-
-                bool emailLinkForceSameDevice = config.Params.GetBoolean("force_same_device", defaultValue: true);
-                if (!emailLinkForceSameDevice)
-                    throw new IllegalStateException("You must force the same device flow when using email link sign in with anonymous user upgrade");
+                IdpConfig config = (IdpConfig)this.Providers[i];
+                if (config.ProviderId == ("emailLink"))
+                {
+                    bool emailLinkForceSameDevice = config.Params.GetBoolean("force_same_device", true);
+                    if (!emailLinkForceSameDevice)
+                    {
+                        throw new IllegalStateException("You must force the same device flow when using email link sign in with anonymous user upgrade");
+                    }
+                }
             }
+
         }
     }
 }
 
 #pragma warning restore XAOBS001 // Type or member is obsolete
+
