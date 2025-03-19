@@ -16,12 +16,12 @@
       To learn more, see: https://learn.microsoft.com/dotnet/maui/migration/android-binding-projects
     -->
   </PropertyGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="Xamarin.Firebase.Auth" Version="123.2.0" />
     <PackageReference Include="Xamarin.Firebase.Storage" Version="121.0.1.2" />
-    <PackageReference Include="Xamarin.Firebase.Firestore" Version="125.1.2" />
-    <PackageReference Include="Xamarin.Firebase.Database" Version="121.0.0.4" />
+    <!--<PackageReference Include="Xamarin.Firebase.Firestore" Version="125.1.2" />-->
+    <!--<PackageReference Include="Xamarin.Firebase.Database" Version="121.0.0.4" />-->
 
     <PackageReference Include="Xamarin.Android.Glide" Version="4.16.0.11" />
     <PackageReference Include="Xamarin.Android.Glide.AVIF.Integration" Version="4.16.0.11" />
@@ -36,8 +36,7 @@
     <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0.31" />
     <PackageReference Include="Xamarin.AndroidX.Lifecycle.Extensions" Version="2.2.0.31" />
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.12.0.2" />
-    
-    <!--New dependencies-->
+   
     <PackageReference Include="Xamarin.Kotlin.StdLib" Version="2.0.21.2" />
     <PackageReference Include="Xamarin.GooglePlayServices.Auth" Version="121.3.0.1" />
     <PackageReference Include="Xamarin.KotlinX.Coroutines.Android" Version="1.9.0.2" />
@@ -49,32 +48,14 @@
     <PackageReference Include="Xamarin.AndroidX.Annotation" Version="1.9.1.2" />
     <PackageReference Include="Xamarin.AndroidX.Lifecycle.Runtime" Version="2.8.7.2" />
     <PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModel" Version="2.8.7.2" />
-    <!--<PackageReference Include="" />-->
-
+    <PackageReference Include="Xamarin.Facebook.Login.Android" Version="11.2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <AndroidNamespaceReplacement Include="Com.Firebase.UI" Replacement="FirebaseUI" />
   </ItemGroup>
 
-  <!-- Include format is {GroupId}:{ArtifactId} -->  
   <ItemGroup>
-    <!--
-    <AndroidAdditionalJavaManifest Include="firebase-bom-33.9.0.pom" JavaArtifact="com.firebaseui:firebase-ui-auth:9.0.0" />
-    <AndroidAdditionalJavaManifest Include="firebase-bom-33.9.0.pom" JavaArtifact="com.firebaseui:firebase-ui-storage:9.0.0" />
-    <AndroidAdditionalJavaManifest Include="firebase-bom-33.9.0.pom" JavaArtifact="com.firebaseui:firebase-ui-firestore:9.0.0" />
-    <AndroidAdditionalJavaManifest Include="firebase-bom-33.9.0.pom" JavaArtifact="com.firebaseui:firebase-ui-database:9.0.0" />-->
+    <Folder Include="Additions\Database\" />
   </ItemGroup>
-
-  <!--
-  IF WHEN TRYING USING MAVEN YOU GET THE FOLLOWING ERROR
-  XA4236: Cannot download Maven artifact
-  CHECK IF YOU HAVE A READONLY CACHE FOLDER IT WILL NOT WORK EITHER MANUALY ADD THE FILES OR FIX THE READONLY ATTRIBUTE
-  -->
-  <ItemGroup>
-    <!--<AndroidLibrary Manifest="firebase-ui-firestore-9.0.0.pom" Update="firebase-ui-firestore-9.0.0.aar" />-->
-    <!--<AndroidLibrary Manifest="firebase-ui-database-9.0.0.pom" Update="firebase-ui-database-9.0.0.aar" />-->
-    <!--<AndroidLibrary Manifest="firebase-ui-auth-9.0.0.pom" Update="firebase-ui-auth-9.0.0.aar" />-->
-    <!--<AndroidLibrary Manifest="firebase-ui-storage-9.0.0.pom" Update="firebase-ui-storage-9.0.0.aar" />-->
-</ItemGroup>
 </Project>

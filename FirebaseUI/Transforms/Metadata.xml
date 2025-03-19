@@ -1,7 +1,27 @@
 ﻿<metadata>
+	<!--
+==== Cycle 1 ====
+
+The method '[Method] androidx.credentials.CredentialManager access$getCredentialManager(com.firebase.ui.auth.ui.idp.AuthMethodPickerActivity $this)' was removed because its name contains a dollar sign.
+The method '[Method] com.firebase.ui.auth.viewmodel.idp.SocialProviderResponseHandler access$getMHandler$p(com.firebase.ui.auth.ui.idp.AuthMethodPickerActivity $this)' was removed because its name contains a dollar sign.
+The method '[Method] void access$handleCredentialManagerFailure(com.firebase.ui.auth.ui.idp.AuthMethodPickerActivity $this, androidx.credentials.exceptions.GetCredentialException e)' was removed because its name contains a dollar sign.
+The method '[Method] void access$handleCredentialManagerResult(com.firebase.ui.auth.ui.idp.AuthMethodPickerActivity $this, androidx.credentials.Credential credential)' was removed because its name contains a dollar sign.
+The method '[Method] void access$showAuthMethodPicker(com.firebase.ui.auth.ui.idp.AuthMethodPickerActivity $this)' was removed because its name contains a dollar sign.
+The method '[Method] androidx.credentials.CredentialManager access$getCredentialManager$p(com.firebase.ui.auth.viewmodel.credentialmanager.CredentialManagerHandler $this)' was removed because its name contains a dollar sign.
+The method '[Method] com.firebase.ui.auth.IdpResponse access$getResponse$p(com.firebase.ui.auth.viewmodel.credentialmanager.CredentialManagerHandler $this)' was removed because its name contains a dollar sign.
+The method '[Method] void access$setResult(com.firebase.ui.auth.viewmodel.credentialmanager.CredentialManagerHandler $this, com.firebase.ui.auth.data.model.Resource output)' was removed because its name contains a dollar sign.
+
+
+Affected classes: HelperActivityBase => 
+The method '[Method] android.content.Intent access$createBaseIntent$s-2134665555(android.content.Context context, java.lang.Class target, com.firebase.ui.auth.data.model.FlowParameters flowParams)' was removed because its name contains a dollar sign.
+Affected classes: KickoffActivity => 
+The method '[Method] android.content.Intent access$createBaseIntent$s1435643476(android.content.Context context, java.lang.Class target, com.firebase.ui.auth.data.model.FlowParameters flowParams)' was removed because its name contains a dollar sign.
+
+	-->
+	
 	
 	<!-- FirebaseUI.Auth -->
-	<!--<attr path="/api/package[@name='com.firebase.ui.auth.data.model']/
+	<attr path="/api/package[@name='com.firebase.ui.auth.data.model']/
 		class[@name='CountryInfo']/
 		method[@name='compareTo' and count(parameter)=1 and
 		parameter[1][@type='com.firebase.ui.auth.data.model.CountryInfo']]
@@ -14,35 +34,21 @@
 		parameter[1][@type='com.google.android.gms.tasks.Task&lt;com.google.firebase.auth.AuthResult&gt;']]"
 		name="managedReturn"> Java.Lang.Object </attr>
 	
-	<attr path="/api/package[@name='com.firebase.ui.auth']/
-		class[@name='FirebaseAuthUIActivityResultContract']/
-		method[@name='parseResult' and
-		count(parameter)=2 and
-		parameter[1][@type='int'] and
-		parameter[2][@type='android.content.Intent']]"
-		name="managedReturn"> Java.Lang.Object </attr>
+<!--	<attr path="/api/package[@name='com.firebase.ui.auth']/
+		  class[@name='FirebaseAuthUIActivityResultContract']/
+		  method[@name='createIntent' and count(parameter)=2 and 
+		  parameter[1][@type='android.content.Context'] and 
+		  parameter[2][@type='android.content.Intent']]"
+		name="managedReturn"> Java.Lang.Object </attr>-->
 
-	<attr path="/api/package[@name='com.firebase.ui.auth']/
+<!--	<attr path="/api/package[@name='com.firebase.ui.auth']/
 		  class[@name='FirebaseAuthUIActivityResultContract']/
 		  method[@name='createIntent' and count(parameter)=2 and
 		  parameter[1][@type='android.content.Context'] and parameter[2][@type='android.content.Intent']]
 		  /parameter[2]" name="managedType"> Java.Lang.Object </attr>-->
 
-	<!-- do not use
-	<attr path="/api/package[@name='com.firebase.ui.auth.viewmodel']/
-		  class[@name='ResourceObserver']/
-		  method[@name='onChanged' and count(parameter)=1 and
-		  parameter[1][@type='com.firebase.ui.auth.data.model.Resource&lt;T&gt;']]
-		  /parameter[1]" name="managedType"> Java.Lang.Object </attr>
-
-	<attr path="/api/package[@name='com.firebase.ui.auth']/
-		  class[@name='AuthUI.AuthIntentBuilder']"
-		  name="visibility"> public </attr>
-	
-	-->
-	
 	<!-- FirebaseUI.Storage -->
-	<!--<attr path="/api/package[@name='com.firebase.ui.storage.images']/
+	<attr path="/api/package[@name='com.firebase.ui.storage.images']/
 		  class[@name='FirebaseImageLoader']/
 		  method[@name='handles' and count(parameter)=1 and 
 		  parameter[1][@type='com.google.firebase.storage.StorageReference']]
@@ -56,8 +62,34 @@
 		  parameter[2][@type='int'] and parameter[3][@type='int'] and
 		  parameter[4][@type='com.bumptech.glide.load.Options']]
 		  /parameter[1]"
-		  name="managedType"> Java.Lang.Object  </attr>-->
+		  name="managedType"> Java.Lang.Object  </attr>
 	
-	<!-- FirebaseUI. -->
+	<!-- FirebaseUI.Firestore -->
 	
+	<!-- Paging -->
+	<!--<attr path="/api/package[@name='com.firebase.ui.firestore.paging']/
+		  class[@name='DefaultSnapshotDiffCallback']/
+		  method[@name='areItemsTheSame' and count(parameter)=2 and
+		  parameter[1][@type='com.google.firebase.firestore.DocumentSnapshot'] and
+		  parameter[2][@type='com.google.firebase.firestore.DocumentSnapshot']]
+		  /parameter[1]"
+		  name="managedType"> Java.Lang.Object  </attr>
+	
+	<attr path="/api/package[@name='com.firebase.ui.firestore.paging']/
+	  class[@name='DefaultSnapshotDiffCallback']/
+	  method[@name='areItemsTheSame' and count(parameter)=2 and
+	  parameter[1][@type='com.google.firebase.firestore.DocumentSnapshot'] and
+	  parameter[2][@type='com.google.firebase.firestore.DocumentSnapshot']]
+	  /parameter[2]"
+	  name="managedType"> Java.Lang.Object  </attr>-->
+	<!-- ^^^^ -->
+
+	<!-- FirebaseUI.Database -->
+	<!--<attr path="/api/package[@name='com.firebase.ui.database']/interface[@name='FirebaseAdapter']"
+		  name="visibility">public</attr>-->
+	
+	<!-- FirebaseUI.Common -->
+	<!--<remove-node path="/api/package[@name='com.firebase.ui.common']/
+		  class[@name='BaseObservableSnapshotArray']/
+		  method[@name='reversed' and count(parameter)=0]" />-->
 </metadata>
