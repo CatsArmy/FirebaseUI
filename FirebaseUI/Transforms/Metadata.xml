@@ -1,55 +1,51 @@
 ﻿<metadata>
 	<!-- FirebaseUI.Auth -->
-	<attr path="/api/package[@name='com.firebase.ui.auth.data.model']/
-		class[@name='CountryInfo']/
-		method[@name='compareTo' and count(parameter)=1 and
-		parameter[1][@type='com.firebase.ui.auth.data.model.CountryInfo']]
-		/parameter[1]" name="managedType"> Java.Lang.Object </attr>
+	<attr path="/api/package[@name='com.firebase.ui.auth.data.model']/class[@name='CountryInfo']/method[@name='compareTo' and count(parameter)=1 and parameter[1][@type='com.firebase.ui.auth.data.model.CountryInfo']]/parameter[1]" name="managedType"> Java.Lang.Object </attr>
 
-	<attr path="/api/package[@name='com.firebase.ui.auth.data.remote']/
-		class[@name='ProfileMerger']/
-		method[@name='then' and
-		count(parameter)=1 and
-		parameter[1][@type='com.google.android.gms.tasks.Task&lt;com.google.firebase.auth.AuthResult&gt;']]"
+	<attr path="/api/package[@name='com.firebase.ui.auth.data.remote']/class[@name='ProfileMerger']/method[@name='then' and count(parameter)=1 and parameter[1][@type='com.google.android.gms.tasks.Task&lt;com.google.firebase.auth.AuthResult&gt;']]"
 		name="managedReturn"> Java.Lang.Object </attr>
+
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.AuthIntentBuilder']" name="visibility">public</attr>
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']" name="visibility">public</attr>
 	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setAlwaysShowSignInMethodScreen' and count(parameter)=1 and parameter[1][@type='boolean']]" />
+	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setAuthMethodPickerLayout' and count(parameter)=1 and parameter[1][@type='com.firebase.ui.auth.AuthMethodPickerLayout']]" />
+	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setAvailableProviders' and count(parameter)=1 and parameter[1][@type='java.util.List']]" />
+	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setCredentialManagerEnabled' and count(parameter)=1 and parameter[1][@type='boolean']]"/>
+	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setDefaultProvider' and count(parameter)=1 and parameter[1][@type='com.firebase.ui.auth.AuthUI.IdpConfig']]" />
+	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setLockOrientation' and count(parameter)=1 and parameter[1][@type='boolean']]" />
+	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setLogo' and count(parameter)=1 and parameter[1][@type='int']]"	/>
+	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setPrivacyPolicyUrl' and count(parameter)=1 and parameter[1][@type='java.lang.String']]" />
+	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setResetPasswordSettings' and count(parameter)=1 and parameter[1][@type='com.google.firebase.auth.ActionCodeSettings']]" />
+	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setTheme' and count(parameter)=1 and parameter[1][@type='int']]" />
+	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setTosAndPrivacyPolicyUrls' and count(parameter)=2 and parameter[1][@type='java.lang.String'] and parameter[2][@type='java.lang.String']]" />
+	
+	<remove-node path="/api/package[@name='com.firebase.ui.auth']/class[@name='AuthUI.SignInIntentBuilder']/method[@name='setTosUrl' and count(parameter)=1 and parameter[1][@type='java.lang.String']]" />
+	
+	
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='FirebaseAuthUIActivityResultContract']/method[@name='createIntent' and count(parameter)=2 and parameter[1][@type='android.content.Context'] and parameter[2][@type='android.content.Intent']]/parameter[2]" name="managedType"> Java.Lang.Object </attr>
 
-	<attr path="/api/package[@name='com.firebase.ui.auth']/
-		  class[@name='FirebaseAuthUIActivityResultContract']/
-		  method[@name='createIntent' and count(parameter)=2 and 
-		  parameter[1][@type='android.content.Context'] and 
-		  parameter[2][@type='android.content.Intent']]
-		  /parameter[2]" name="managedType"> Java.Lang.Object </attr>
-
-	<attr path="/api/package[@name='com.firebase.ui.auth']/
-		  class[@name='FirebaseAuthUIActivityResultContract']/
-		  method[@name='createIntent' and count(parameter)=2 and 
-		  parameter[1][@type='android.content.Context'] and 
-		  parameter[2][@type='android.content.Intent']]"
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='FirebaseAuthUIActivityResultContract']/method[@name='createIntent' and count(parameter)=2 and parameter[1][@type='android.content.Context'] and parameter[2][@type='android.content.Intent']]"
 		  name="managedOverride">override</attr>
 
-	<attr path="/api/package[@name='com.firebase.ui.auth']/
-		  class[@name='FirebaseAuthUIActivityResultContract']/
-		  method[@name='parseResult' and count(parameter)=2 and 
-		  parameter[1][@type='int'] and 
-		  parameter[2][@type='android.content.Intent']]"
+	<attr path="/api/package[@name='com.firebase.ui.auth']/class[@name='FirebaseAuthUIActivityResultContract']/method[@name='parseResult' and count(parameter)=2 and parameter[1][@type='int'] and parameter[2][@type='android.content.Intent']]"
 		  name="managedReturn"> Java.Lang.Object </attr>
 	
 	<!-- FirebaseUI.Storage -->
-	<attr path="/api/package[@name='com.firebase.ui.storage.images']/
-		  class[@name='FirebaseImageLoader']/
-		  method[@name='handles' and count(parameter)=1 and 
-		  parameter[1][@type='com.google.firebase.storage.StorageReference']]
-		  /parameter[1]"
+	<attr path="/api/package[@name='com.firebase.ui.storage.images']/class[@name='FirebaseImageLoader']/method[@name='handles' and count(parameter)=1 and parameter[1][@type='com.google.firebase.storage.StorageReference']]/parameter[1]"
 		  name="managedType"> Java.Lang.Object  </attr>
 
-	<attr path="/api/package[@name='com.firebase.ui.storage.images']/
-		  class[@name='FirebaseImageLoader']/
-		  method[@name='buildLoadData' and count(parameter)=4 and
-		  parameter[1][@type='com.google.firebase.storage.StorageReference'] and
-		  parameter[2][@type='int'] and parameter[3][@type='int'] and
-		  parameter[4][@type='com.bumptech.glide.load.Options']]
-		  /parameter[1]"
+	<attr path="/api/package[@name='com.firebase.ui.storage.images']/class[@name='FirebaseImageLoader']/method[@name='buildLoadData' and count(parameter)=4 and parameter[1][@type='com.google.firebase.storage.StorageReference'] and parameter[2][@type='int'] and parameter[3][@type='int'] and parameter[4][@type='com.bumptech.glide.load.Options']]/parameter[1]"
 		  name="managedType"> Java.Lang.Object  </attr>
 	
 	<!-- FirebaseUI.Firestore -->
