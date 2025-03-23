@@ -34,13 +34,13 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Firebase.Auth" Version="123.2.0" />
     <PackageReference Include="Xamarin.Firebase.Storage" Version="121.0.1.2" />
-    <!--<PackageReference Include="Xamarin.Firebase.Firestore" Version="125.1.2" />-->
-    <!--<PackageReference Include="Xamarin.Firebase.Database" Version="121.0.0.4" />-->
 
     <PackageReference Include="Xamarin.Android.Glide" Version="4.16.0.11" />
+    <PackageReference Include="Xamarin.Android.Glide.Annotations" Version="4.16.0.11" />
     <PackageReference Include="Xamarin.Android.Glide.AVIF.Integration" Version="4.16.0.11" />
     <PackageReference Include="Xamarin.Android.Glide.RecyclerViewIntegration" Version="4.16.0.11" />
-    
+    <PackageReference Include="Kdd.Glide.AppModuleInjector" Version="2.0.0" />
+
     <PackageReference Include="Xamarin.AndroidX.Activity" Version="1.10.1" />
     <PackageReference Include="Xamarin.AndroidX.Fragment" Version="1.8.6" />
 
@@ -60,7 +60,7 @@
     <PackageReference Include="Xamarin.AndroidX.Annotation" Version="1.9.1.2" />
     <PackageReference Include="Xamarin.AndroidX.Lifecycle.Runtime" Version="2.8.7.2" />
     <PackageReference Include="Xamarin.AndroidX.Lifecycle.ViewModel" Version="2.8.7.2" />
-    <!--<PackageReference Include="Xamarin.Facebook.Login.Android" Version="11.2.0.1" />-->
+    <PackageReference Include="Xamarin.Facebook.Login.Android" Version="11.2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
