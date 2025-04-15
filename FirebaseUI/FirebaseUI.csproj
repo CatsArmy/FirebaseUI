@@ -3,33 +3,62 @@
     <RootNamespace>FirebaseUI</RootNamespace>
     <TargetFramework>net9.0-android</TargetFramework>
     <SupportedOSPlatformVersion>23</SupportedOSPlatformVersion>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
     <!--
       Enable trim analyzers for Android class libraries.
       To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/prepare-libraries-for-trimming
     -->
     <IsTrimmable>true</IsTrimmable>
-    <LangVersion>preview</LangVersion>
     <!--
       NOTE: you can simply add .aar or .jar files in this directory to be included in the project.
       To learn more, see: https://learn.microsoft.com/dotnet/maui/migration/android-binding-projects
     -->
-    <AndroidEnableMarshalMethods>true</AndroidEnableMarshalMethods>
+    <AndroidFragmentType>AndroidX.Fragment.App.Fragment</AndroidFragmentType>
+    <AndroidEnablePreloadAssemblies>True</AndroidEnablePreloadAssemblies>
+    <AndroidEnableMarshalMethods>True</AndroidEnableMarshalMethods>
     <NoWarn>XAOBS001</NoWarn>
   </PropertyGroup>
-  
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AnalysisLevel>preview</AnalysisLevel>  
+    <LangVersion>preview</LangVersion>
+    <WarningLevel>9999</WarningLevel>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <AndroidEnableProguard>True</AndroidEnableProguard>
+    <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+    <AndroidEnableDesugar>True</AndroidEnableDesugar>
+
+    <!--New properties-->
+    <AndroidDexTool>d8</AndroidDexTool>
+    <AndroidLinkTool>r8</AndroidLinkTool>
+  </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">        
-  <RunAOTCompilation>True</RunAOTCompilation>
-  <IsAotCompatible>True</IsAotCompatible>
-  <DebugType>portable</DebugType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RunAOTCompilation>True</RunAOTCompilation>
+    <IsAotCompatible>True</IsAotCompatible>
+    <DebugType>portable</DebugType>
     <!--
       Enables trim analyzers and full trimming during Release mode.
       To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/trimming-options#trimming-granularity
     -->
-  <TrimMode>full</TrimMode>
+    <TrimMode>full</TrimMode>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <AndroidLibrary Remove="firebase-ui-auth-9.0.0-javadoc.jar" />
+    <AndroidLibrary Remove="firebase-ui-storage-9.0.0-javadoc.jar" />
+    <!--    
+      <AndroidLibrary Remove="$(SolutionDir)firebase-ui-auth-9.0.0-javadoc.jar" />
+      <AndroidLibrary Remove="$(SolutionDir)firebase-ui-storage-9.0.0-javadoc.jar" />
+      <JavaSourceJar Include="$(SolutionDir)firebase-ui-auth-9.0.0-javadoc.jar" />
+      <JavaSourceJar Include="$(SolutionDir)firebase-ui-storage-9.0.0-javadoc.jar" />
+    -->
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Xamarin.Firebase.Auth" Version="123.2.0" />
@@ -39,7 +68,6 @@
     <PackageReference Include="Xamarin.Android.Glide.Annotations" Version="4.16.0.11" />
     <PackageReference Include="Xamarin.Android.Glide.AVIF.Integration" Version="4.16.0.11" />
     <PackageReference Include="Xamarin.Android.Glide.RecyclerViewIntegration" Version="4.16.0.11" />
-    <PackageReference Include="Kdd.Glide.AppModuleInjector" Version="2.0.0" />
 
     <PackageReference Include="Xamarin.AndroidX.Activity" Version="1.10.1" />
     <PackageReference Include="Xamarin.AndroidX.Fragment" Version="1.8.6" />
